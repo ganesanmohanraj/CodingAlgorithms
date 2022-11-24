@@ -1,0 +1,66 @@
+/*
+ * Given a list of integers, create a function that returns the highest product
+ * between three of those numbers.
+ * 
+ * For example, given the list [1, 10, 2, 6, 5, 3] the
+ * highest product would be 10*6*5 = 300
+ */
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HighestProduct {
+	
+	int[] smallest = new int[] {Integer.MAX_VALUE, Integer.MAX_VALUE};
+	int[] largest = new int[] {Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE};
+	
+	public int findHighestProductOfThree(List<Integer> list) {		
+		for(int value : list) {
+			reviewLarge(value);
+			reviewSmall(value);
+		}
+		
+		int productOne = largest[0] * largest[1] * largest[2];
+		int productTwo = largest[0] * smallest[0] * smallest[1];
+		
+		return Math.max(productOne, productTwo);
+	}
+	
+	private void reviewSmall(int a) {
+		
+		if(a < smallest[0]) {
+			smallest[1] = smallest[0];
+			smallest[0] = a;
+		} else if(a < smallest[1]) {
+			smallest[1] = a;
+		}		
+	} 
+	
+	private void reviewLarge(int a) {
+		if(a > largest[0]) {
+			largest[2] = largest[1];
+			largest[1] = largest[0];
+			largest[0] = a;
+		} else if(a > largest[1]) {
+			largest[2] = largest[1];
+			largest[1] = a;
+		}  else if(a > largest[2]) {
+			largest[2] = a;
+		}		
+	}
+
+	public static void main(String[] args) {
+		List<Integer> listValues = new ArrayList<Integer>();
+		listValues.add(1);
+		listValues.add(10);
+		listValues.add(2);
+		listValues.add(6);
+		listValues.add(5);
+		listValues.add(3);
+		
+		int highestProduct = new HighestProduct().findHighestProductOfThree(listValues);
+		
+		System.out.println("Highest Product between three:" + highestProduct);
+	}
+
+}
